@@ -451,6 +451,7 @@ class EU(object):
         8. Stack Instructions
         9. I/O Instructions
         10. Miscellaneous Instructions'''
+        print(self.opcode)
         old_cs_ip = self.bus.cs_ip
         if self.opcode in data_transfer_instr:
             self.data_transfer_ins()

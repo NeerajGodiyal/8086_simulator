@@ -31,25 +31,21 @@ def main() -> None:
         python main.py <input_file> [options]
     Options:
         -h, --help: show this help message and exit
-        -d, --debug: run in debug mode
         -i, --interrupts: show interrupts
     '''
 
-    DEBUG = False               # debug mode
     INTERRUPT_MSG = False       # show interrupt messages
     try:
         # parse command line arguments
         opts, args = getopt.getopt(
             sys.argv[1:],
-            '-h-d-i',
-            ['help','debug','interrupt']
+            '-h-i',
+            ['help','interrupt']
         )
         for opt_name, _ in opts:
             if opt_name in ('-h','--help'):
                 print(help_str)
                 exit()
-            if opt_name in ('-d', '--debug'):
-                DEBUG = False
             if opt_name in ('-i', '--interrupts'):
                 INTERRUPT_MSG = True
         with open(args[0], 'r', encoding='utf-8') as f:
@@ -71,7 +67,7 @@ def main() -> None:
 
     # run the CPU
     while not cpu.check_done():
-        cpu.iterate(debug=DEBUG)
+        cpu.iterate()
     cpu.print_end_state()
 
 if __name__ == "__main__":

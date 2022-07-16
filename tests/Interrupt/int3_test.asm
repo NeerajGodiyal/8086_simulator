@@ -10,11 +10,11 @@ CODE SEGMENT
             MOV AX, DATA
             MOV DS, AX
             LEA SI, STR1
-            int           
-            int           
+            int           ; 测试断点
+            int           ; 测试断点
             LEA DI, STR2 + 4
             MOV CX, 05H
-            int 03h       
+            int 03h       ; 测试断点
     BACK:   CLD
             MOV AL, [SI]
             MOV [DI], AL

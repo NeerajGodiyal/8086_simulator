@@ -14,7 +14,7 @@ class CPU(object):
         self.BIU = BIU
         self.EU = EU
 
-    def iterate(self, debug=False) -> None:
+    def iterate(self) -> None:
         '''
         The main loop of the CPU.
         
@@ -28,58 +28,16 @@ class CPU(object):
         -------
         None'''
         self.cycle_count += 1
-        if debug:
-            self.EU.print(f"clock cycle {self.cycle_count}: fetching...\n")
 
         self.fetch_cycle()
 
         self.cycle_count += 1
-        if debug:
-            print(f"clock cycle {self.cycle_count}: executing...\n")
 
         self.execute_cycle()
 
-        if (debug or self.EU.interrupt):
-            self.print_state()
-            self.debug()
-            self.EU.interrupt = False
-
-    def debug(self) -> None:
-        '''
-        Prints out the state of the CPU.
         
-        Returns
-        -------
-        None'''
-        while True:
-            cmd = input("Press Enter to continue...\n> ").strip()
-            if not cmd:
-                return
-            cmd = cmd.upper().split()
-            if cmd[0] == 'A':
-                asm_code = input("Run code > ")
-                ins = [s for s in re.split(" |,", asm_code.strip().upper()) if s]
-                self.EU.print(ins)
-                self.EU.opcode = ins[0]
-                if len(ins) > 1:
-                    self.EU.opd = ins[1:]
-                self.EU.get_opbyte()
-                self.EU.control_circuit()
-                return
-
-            if cmd[0] == 'D':
-                if len(cmd) == 2:
-                    adr1 = self.EU.get_int(cmd[1])
-                    self.show_memory(adr1, adr1 + 50)
-                elif len(cmd) == 3:
-                    adr1 = to_decimal(cmd[1])
-                    adr2 = to_decimal(cmd[2])
-                    self.show_memory(adr1, adr2)
-
-            elif cmd[0] == 'R':
-                self.show_regs()
-
-        
+        self.print_state()
+        self.EU.interrupt = False
 
     def fetch_cycle(self) -> None:
         '''
